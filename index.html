@@ -3,54 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loader API | Documentation</title>
+    <title>Loader API Docs</title>
     <link rel="stylesheet" href="/style.css">
     <style>
-        :root { --panel: #1e293b; --accent: #38bdf8; --bg: #0f172a; }
-        body { margin: 0; background: var(--bg); color: white; font-family: system-ui, sans-serif; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        :root { --accent: #38bdf8; --panel: #1e293b; }
+        body { margin: 0; background: #0f172a; color: white; font-family: system-ui, sans-serif; display: flex; flex-direction: column; align-items: center; }
         
-        #preview-section { height: 250px; display: flex; align-items: center; justify-content: center; width: 100%; border-bottom: 1px solid #334155; background: radial-gradient(circle, #1e293b 0%, #0f172a 100%); }
+        #preview-zone { height: 300px; width: 100%; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle, #1e293b 0%, #0f172a 100%); border-bottom: 1px solid #334155; }
         
-        .docs-container { max-width: 800px; width: 90%; padding: 40px 0; }
-        .card { background: var(--panel); padding: 30px; border-radius: 16px; border: 1px solid #334155; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5); }
+        .content { max-width: 700px; width: 90%; padding: 40px 0; }
+        .card { background: var(--panel); padding: 30px; border-radius: 16px; border: 1px solid #334155; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         
-        h1 { text-transform: capitalize; color: var(--accent); margin: 0 0 10px 0; font-size: 2rem; }
-        .code-block { background: #000; padding: 15px; border-radius: 8px; overflow-x: auto; border: 1px solid #334155; margin: 20px 0; }
-        code { color: #f472b6; font-family: 'Courier New', monospace; }
+        h1 { margin: 0 0 10px 0; color: var(--accent); text-transform: capitalize; }
+        .code-box { background: #000; padding: 15px; border-radius: 8px; border: 1px solid #334155; color: #f472b6; font-family: monospace; margin: 20px 0; }
         
-        .prop-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 20px; }
-        .prop-item { background: rgba(255,255,255,0.03); padding: 15px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); }
-        .prop-item b { color: var(--accent); display: block; margin-bottom: 5px; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px; }
-        .prop-item span { font-size: 0.9rem; color: #94a3b8; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-top: 20px; }
+        .item { background: rgba(255,255,255,0.03); padding: 15px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); }
+        .item b { color: var(--accent); display: block; font-size: 0.75rem; text-transform: uppercase; margin-bottom: 5px; }
+        .item span { font-size: 0.85rem; color: #94a3b8; }
     </style>
 </head>
 <body>
 
-    <div id="preview-section">
+    <div id="preview-zone">
         <div id="loader-mount"></div>
     </div>
 
-    <div class="docs-container" id="main-content">
-        <div class="card" id="loader-info" style="display:none;">
-            <h1 id="doc-title">Loader</h1>
-            <p>Native API implementation for the <b id="type-name"></b> component.</p>
+    <div class="content">
+        <div id="docs-card" class="card" style="display:none;">
+            <h1 id="loader-title">Loader</h1>
+            <p>This is a live API preview. Use the properties below to customize the component via JS or URL.</p>
             
-            <div class="code-block">
-                <code>LoaderAPI.render({ type: '<span id="code-type"></span>', target: '#target' });</code>
+            <div class="code-box">
+                LoaderAPI.render({ type: '<span id="js-type"></span>', target: '#container' });
             </div>
 
             <h3>Editable Properties</h3>
-            <div class="prop-grid" id="prop-list"></div>
+            <div id="property-list" class="grid"></div>
         </div>
-        
-        <div id="home-view" style="display:none; text-align: center;">
-            <h1>Loader API Master Library</h1>
-            <p>Available Endpoints:</p>
-            <div class="prop-grid">
-                <a href="/spinner" class="prop-item" style="text-decoration:none; color:inherit;"><b>/spinner</b><span>Classic Circle</span></a>
-                <a href="/ripple" class="prop-item" style="text-decoration:none; color:inherit;"><b>/ripple</b><span>Liquid Pulse</span></a>
-                <a href="/composite" class="prop-item" style="text-decoration:none; color:inherit;"><b>/composite</b><span>Spinner + Dots</span></a>
-                <a href="/skeleton" class="prop-item" style="text-decoration:none; color:inherit;"><b>/skeleton</b><span>Ghost UI</span></a>
+
+        <div id="home-card" class="card" style="display:none; text-align: center;">
+            <h1>API Library</h1>
+            <p>Choose a loader path to see its editable properties:</p>
+            <div class="grid">
+                <a href="/spinner" style="text-decoration:none; color:inherit;" class="item"><b>/spinner</b><span>Ring</span></a>
+                <a href="/ripple" style="text-decoration:none; color:inherit;" class="item"><b>/ripple</b><span>Pulse</span></a>
+                <a href="/composite" style="text-decoration:none; color:inherit;" class="item"><b>/composite</b><span>Combo</span></a>
             </div>
         </div>
     </div>
@@ -60,42 +58,40 @@
         document.addEventListener('DOMContentLoaded', () => {
             const path = window.location.pathname.replace(/\//g, '').toLowerCase();
             
-            // This object defines what properties exist for each loader
-            const registry = {
+            // AUTOMATIC PROPERTY DEFINITIONS
+            const loaderData = {
                 'spinner': ['color', 'size', 'speed'],
                 'ripple': ['color', 'size'],
-                'morph': ['color', 'size', 'speed'],
                 'composite': ['color', 'size', 'speed'],
-                'dots': ['color', 'size'],
+                'morph': ['color', 'size', 'speed'],
                 'skeleton': ['size']
             };
 
-            if (registry[path]) {
-                document.getElementById('loader-info').style.display = 'block';
-                document.getElementById('doc-title').innerText = path;
-                document.getElementById('type-name').innerText = path;
-                document.getElementById('code-type').innerText = path;
+            if (loaderData[path]) {
+                document.getElementById('docs-card').style.display = 'block';
+                document.getElementById('loader-title').innerText = path;
+                document.getElementById('js-type').innerText = path;
 
-                // Build properties list automatically from registry
-                const list = document.getElementById('prop-list');
-                registry[path].forEach(prop => {
+                // Dynamically build the property list (No hard-coding)
+                const list = document.getElementById('property-list');
+                loaderData[path].forEach(prop => {
                     const div = document.createElement('div');
-                    div.className = 'prop-item';
-                    div.innerHTML = `<b>${prop}</b><span>Edit via URL: <code>?${prop}=value</code></span>`;
+                    div.className = 'item';
+                    div.innerHTML = `<b>${prop}</b><span>Customizable via URL: <code>?${prop}=...</code></span>`;
                     list.appendChild(div);
                 });
 
-                // Get URL params for live preview
+                // Render the loader preview
                 const params = new URLSearchParams(window.location.search);
                 LoaderAPI.render({
                     type: path,
                     target: '#loader-mount',
                     color: params.get('color') ? '#' + params.get('color') : undefined,
-                    size: params.get('size') || undefined,
+                    size: params.get('size') || '80px',
                     speed: params.get('speed') || undefined
                 });
             } else {
-                document.getElementById('home-view').style.display = 'block';
+                document.getElementById('home-card').style.display = 'block';
             }
         });
     </script>
