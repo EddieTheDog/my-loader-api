@@ -2,72 +2,38 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loader API</title>
+    <title>Loader API v1.0</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        body, html { 
-            height: 100%; margin: 0; 
-            display: flex; flex-direction: column;
-            align-items: center; justify-content: center; 
-            font-family: sans-serif; background: transparent; 
-        }
-        .error-msg { color: #94a3b8; text-align: center; }
-        code { background: #1e293b; padding: 2px 5px; border-radius: 4px; color: #38bdf8; }
+        body { font-family: sans-serif; padding: 40px; line-height: 1.6; color: #333; }
+        code { background: #eee; padding: 4px 8px; border-radius: 4px; color: #d63384; }
+        .demo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 40px; }
+        .demo-card { border: 1px solid #ddd; padding: 20px; border-radius: 10px; text-align: center; }
     </style>
 </head>
 <body>
-    <div id="api-output"></div>
+    <h1>Loader API is Live! 🚀</h1>
+    <p>To use this API in any project, add these two tags to your HTML:</p>
+    <code>&lt;link rel="stylesheet" href="https://my-loader-api-1.onrender.com/style.css"&gt;</code><br>
+    <code>&lt;script src="https://my-loader-api-1.onrender.com/index.js"&gt;&lt;/script&gt;</code>
 
+    <h3>Example API Call:</h3>
+    <pre><code>LoaderAPI.render({ type: 'ripple', target: '#my-div', color: 'orange' });</code></pre>
+
+    <div class="demo-grid">
+        <div class="demo-card"><div id="d1"></div><p>spinner</p></div>
+        <div class="demo-card"><div id="d2"></div><p>ripple</p></div>
+        <div class="demo-card"><div id="d3"></div><p>composite</p></div>
+        <div class="demo-card"><div id="d4"></div><p>morph</p></div>
+    </div>
+
+    <script src="index.js"></script>
     <script>
-        function renderLoader() {
-            // Get the loader type from the URL path (e.g., /ripple)
-            const path = window.location.pathname.toLowerCase().replace(/\//g, '');
-            
-            // Get custom properties from Query Params (e.g., ?color=ff4757)
-            const params = new URLSearchParams(window.location.search);
-            const color = params.get('color') ? '#' + params.get('color') : '#38bdf8';
-            const size = params.get('size') || '60px';
-            const speed = params.get('speed') || '1s';
-
-            // Apply variables to the document
-            const root = document.documentElement;
-            root.style.setProperty('--loader-color', color);
-            root.style.setProperty('--loader-size', size);
-            root.style.setProperty('--loader-speed', speed);
-
-            const output = document.getElementById('api-output');
-
-            // The Loader Library
-            const library = {
-                'spinner': '<div class="api-spinner"></div>',
-                'ripple': '<div class="api-ripple"></div>',
-                'morph': '<div class="api-morph"></div>',
-                'dots': '<div class="api-dots"><div class="api-dot"></div><div class="api-dot"></div><div class="api-dot"></div></div>',
-                'composite': `
-                    <div class="api-composite">
-                        <div class="api-spinner" style="width:30px; height:30px;"></div>
-                        <div class="api-dots">
-                            <div class="api-dot"></div><div class="api-dot"></div><div class="api-dot"></div>
-                        </div>
-                    </div>`,
-                'skeleton': '<div class="api-skeleton" style="width:200px; height:25px;"></div>'
-            };
-
-            if (library[path]) {
-                output.innerHTML = library[path];
-            } else {
-                // Default Home/Help Screen
-                output.innerHTML = `
-                    <div class="error-msg">
-                        <h2>Loader API Home</h2>
-                        <p>To use a loader, go to: <code>/spinner</code>, <code>/ripple</code>, <code>/morph</code>, <code>/dots</code>, <code>/composite</code>, or <code>/skeleton</code></p>
-                        <p>Example: <code>/ripple?color=ff0000&size=100px</code></p>
-                    </div>`;
-            }
-        }
-
-        window.onload = renderLoader;
+        // Preview loaders on the home page
+        LoaderAPI.render({ type: 'spinner', target: '#d1' });
+        LoaderAPI.render({ type: 'ripple', target: '#d2', color: '#ff4757' });
+        LoaderAPI.render({ type: 'composite', target: '#d3', color: '#2ed573' });
+        LoaderAPI.render({ type: 'morph', target: '#d4', color: '#ffa502' });
     </script>
 </body>
 </html>
