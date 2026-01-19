@@ -1,4 +1,30 @@
-:root {
+:root { --loader-color: #38bdf8; --loader-size: 60px; --loader-speed: 1s; }
+.api-host { display: flex; align-items: center; justify-content: center; }
+
+.api-spinner {
+    width: var(--loader-size); height: var(--loader-size);
+    border: 5px solid rgba(255,255,255,0.1); border-top-color: var(--loader-color);
+    border-radius: 50%; animation: spin var(--loader-speed) linear infinite;
+}
+
+.api-ripple {
+    width: var(--loader-size); height: var(--loader-size);
+    background: var(--loader-color); border-radius: 50%; position: relative;
+}
+.api-ripple::after {
+    content: ""; position: absolute; inset: 0; border-radius: 50%;
+    border: 2px solid var(--loader-color); animation: ripple 2s infinite ease-out;
+}
+
+.api-composite { display: flex; flex-direction: column; align-items: center; gap: 15px; }
+.api-dots { display: flex; gap: 8px; }
+.api-dot { width: 10px; height: 10px; background: var(--loader-color); border-radius: 50%; animation: bounce 0.6s infinite alternate; }
+.api-dot:nth-child(2) { animation-delay: 0.2s; }
+.api-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes ripple { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(3); opacity: 0; } }
+@keyframes bounce { to { transform: translateY(-10px); } }:root {
     --loader-color: #38bdf8;
     --loader-size: 60px;
     --loader-speed: 1s;
