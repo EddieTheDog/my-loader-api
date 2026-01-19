@@ -1,97 +1,46 @@
-/* Master API Stylesheet */
 :root {
     --loader-color: #38bdf8;
-    --loader-size: 50px;
+    --loader-size: 60px;
     --loader-speed: 1s;
 }
 
-.api-loader-wrapper {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-}
+.api-instance { display: inline-flex; align-items: center; justify-content: center; width: 100%; }
 
-/* 1. Classic Spinner */
+/* Spinner */
 .api-spinner {
-    width: var(--loader-size);
-    height: var(--loader-size);
-    border: 4px solid rgba(0, 0, 0, 0.1);
-    border-top: 4px solid var(--loader-color);
-    border-radius: 50%;
-    animation: api-spin var(--loader-speed) linear infinite;
+    width: var(--loader-size); height: var(--loader-size);
+    border: 5px solid rgba(255,255,255,0.1); border-top-color: var(--loader-color);
+    border-radius: 50%; animation: api-spin var(--loader-speed) linear infinite;
 }
 
-/* 2. Liquid Ripple */
+/* Ripple */
 .api-ripple {
-    width: var(--loader-size);
-    height: var(--loader-size);
-    background: var(--loader-color);
-    border-radius: 50%;
-    position: relative;
+    width: var(--loader-size); height: var(--loader-size);
+    background: var(--loader-color); border-radius: 50%; position: relative;
 }
 .api-ripple::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: 50%;
-    border: 2px solid var(--loader-color);
-    animation: api-ripple 2s infinite ease-out;
+    content: ""; position: absolute; inset: 0; border-radius: 50%;
+    border: 2px solid var(--loader-color); animation: api-ripple 2s infinite ease-out;
 }
 
-/* 3. Bouncing Dots */
-.api-dots {
-    display: flex;
-    gap: 8px;
-}
+/* Dots */
+.api-dots { display: flex; gap: 10px; }
 .api-dot {
-    width: calc(var(--loader-size) / 4);
-    height: calc(var(--loader-size) / 4);
-    background: var(--loader-color);
-    border-radius: 50%;
-    animation: api-bounce 0.6s infinite alternate;
+    width: calc(var(--loader-size) / 4); height: calc(var(--loader-size) / 4);
+    background: var(--loader-color); border-radius: 50%; animation: api-bounce 0.6s infinite alternate;
 }
 .api-dot:nth-child(2) { animation-delay: 0.2s; }
 .api-dot:nth-child(3) { animation-delay: 0.4s; }
 
-/* 4. Composite (Spinner + Dots) */
-.api-composite {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-}
-
-/* 5. Skeleton (Ghost UI) */
-.api-skeleton {
-    background: #e2e8f0;
-    position: relative;
-    overflow: hidden;
-    border-radius: 6px;
-    width: 100%;
-}
+/* Skeleton */
+.api-skeleton { background: #334155; position: relative; overflow: hidden; border-radius: 8px; }
 .api-skeleton::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
     animation: api-shimmer 1.5s infinite;
 }
 
-/* 6. Morphing Shape */
-.api-morph {
-    width: var(--loader-size);
-    height: var(--loader-size);
-    background: var(--loader-color);
-    animation: api-morphing var(--loader-speed) infinite ease-in-out;
-}
-
-/* KEYFRAMES */
 @keyframes api-spin { to { transform: rotate(360deg); } }
 @keyframes api-ripple { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(3); opacity: 0; } }
-@keyframes api-bounce { to { transform: translateY(-10px); } }
+@keyframes api-bounce { to { transform: translateY(-15px); } }
 @keyframes api-shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
-@keyframes api-morphing {
-    0% { border-radius: 0; transform: rotate(0deg); }
-    50% { border-radius: 50%; transform: rotate(180deg); }
-    100% { border-radius: 0; transform: rotate(360deg); }
-}
