@@ -3,118 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loader API Docs</title>
-    <link rel="stylesheet" href="/style.css">
+    <title>Loader API v1</title>
     <style>
-        :root { --accent: #38bdf8; --panel: #1e293b; --bg: #0f172a; }
-        body { margin: 0; background: var(--bg); color: white; font-family: system-ui, sans-serif; display: flex; flex-direction: column; align-items: center; }
-        
-        #preview-box { height: 250px; width: 100%; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle, #1e293b 0%, #0f172a 100%); border-bottom: 1px solid #334155; }
-        
+        :root { --accent: #38bdf8; --bg: #0f172a; --card: #1e293b; }
+        body { margin: 0; background: var(--bg); color: white; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        #preview { height: 250px; width: 100%; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle, #1e293b 0%, #0f172a 100%); border-bottom: 1px solid #334155; }
         .container { max-width: 700px; width: 90%; padding: 40px 0; }
-        .card { background: var(--panel); padding: 30px; border-radius: 16px; border: 1px solid #334155; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        
-        h1 { margin: 0; color: var(--accent); text-transform: capitalize; font-size: 2.2rem; }
-        .usage-text { color: #94a3b8; margin: 10px 0 25px 0; }
-        
-        .prop-section { margin-top: 30px; border-top: 1px solid #334155; padding-top: 20px; }
-        .prop-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 30px; }
+        .card { background: var(--card); padding: 30px; border-radius: 16px; border: 1px solid #334155; }
+        h1 { margin: 0; color: var(--accent); text-transform: capitalize; }
+        .url-box { background: #000; padding: 12px; border-radius: 8px; display: flex; align-items: center; gap: 10px; border: 1px solid var(--accent); margin: 20px 0; }
+        #url-display { font-family: monospace; color: #f472b6; flex-grow: 1; overflow: hidden; text-overflow: ellipsis; }
+        .prop-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
         .prop-card { background: rgba(0,0,0,0.2); padding: 15px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.05); }
-        .prop-card b { color: var(--accent); display: block; margin-bottom: 5px; font-size: 0.8rem; text-transform: uppercase; }
+        .prop-card b { color: var(--accent); display: block; margin-bottom: 5px; font-size: 0.8rem; }
+        button { background: var(--accent); border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; }
         
-        .copy-area { display: flex; gap: 10px; background: #000; padding: 10px; border-radius: 8px; align-items: center; border: 1px solid var(--accent); }
-        .url-text { font-family: monospace; color: #f472b6; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex-grow: 1; }
-        
-        button { background: var(--accent); color: #000; border: none; padding: 8px 16px; border-radius: 5px; font-weight: bold; cursor: pointer; transition: 0.2s; }
-        button:hover { opacity: 0.8; }
-        button:active { transform: scale(0.95); }
+        /* Loader Styles */
+        .api-spinner { width: var(--sz); height: var(--sz); border: 5px solid rgba(255,255,255,0.1); border-top-color: var(--clr); border-radius: 50%; animation: spin var(--sp) linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
-    <div id="preview-box">
-        <div id="loader-mount"></div>
+    <div id="preview">
+        <div id="mount"></div>
     </div>
 
     <div class="container">
-        <div id="loader-info" class="card" style="display:none;">
-            <h1 id="title-text">Loader</h1>
-            <p class="usage-text">This loader is generated dynamically. You can use the properties listed below to modify it via the URL or the JavaScript API.</p>
-
-            <div class="copy-area">
-                <span class="url-text" id="current-url"></span>
+        <div id="doc-card" class="card" style="display:none;">
+            <h1 id="title">Loader</h1>
+            <p>Direct URL/API access for this component.</p>
+            
+            <div class="url-box">
+                <span id="url-display"></span>
                 <button onclick="copyURL()">Copy URL</button>
             </div>
 
-            <div class="prop-section">
-                <h3>Editable Properties</h3>
-                <div id="prop-list" class="prop-grid"></div>
-            </div>
+            <div class="prop-grid" id="prop-list"></div>
         </div>
 
-        <div id="home-screen" class="card" style="display:none; text-align: center;">
-            <h1>Loader Master API</h1>
-            <p>Visit a path to see editable properties:</p>
-            <div class="prop-grid" style="margin-top:20px">
-                <a href="/spinner" style="text-decoration:none; color:inherit" class="prop-card"><b>/spinner</b>Classic Ring</a>
-                <a href="/ripple" style="text-decoration:none; color:inherit" class="prop-card"><b>/ripple</b>Liquid Pulse</a>
-                <a href="/composite" style="text-decoration:none; color:inherit" class="prop-card"><b>/composite</b>Spinner + Dots</a>
-                <a href="/morph" style="text-decoration:none; color:inherit" class="prop-card"><b>/morph</b>Shape Shifter</a>
-            </div>
+        <div id="home-card" class="card" style="display:none; text-align:center;">
+            <h1>Loader Library</h1>
+            <p>Visit <code>/spinner</code> or <code>/ripple</code> to see properties.</p>
         </div>
     </div>
 
-    <script src="/index.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const path = window.location.pathname.replace(/\//g, '').toLowerCase();
-            const currentURL = window.location.href;
-            document.getElementById('current-url').innerText = currentURL;
+        // Use a single script to prevent "Uncaught ReferenceError"
+        window.LoaderAPI = {
+            render: function(c) {
+                const m = document.getElementById('mount');
+                if(!m) return;
+                m.style.setProperty('--clr', c.color || '#38bdf8');
+                m.style.setProperty('--sz', c.size || '60px');
+                m.style.setProperty('--sp', c.speed || '1s');
+                m.innerHTML = `<div class="api-${c.type}"></div>`;
+            }
+        };
 
-            // Property Dictionary (Used to generate text on screen)
+        window.addEventListener('DOMContentLoaded', () => {
+            const path = window.location.pathname.replace(/\//g, '').toLowerCase();
+            const urlDisplay = document.getElementById('url-display');
+            if(urlDisplay) urlDisplay.innerText = window.location.href;
+
             const registry = {
                 'spinner': ['color', 'size', 'speed'],
-                'ripple': ['color', 'size'],
-                'composite': ['color', 'size', 'speed'],
-                'morph': ['color', 'size', 'speed'],
-                'skeleton': ['size'],
-                'dots': ['color', 'size']
+                'ripple': ['color', 'size']
             };
 
             if (registry[path]) {
-                document.getElementById('loader-info').style.display = 'block';
-                document.getElementById('title-text').innerText = path;
-
-                // Dynamically build the text descriptions for properties
+                document.getElementById('doc-card').style.display = 'block';
+                document.getElementById('title').innerText = path;
+                
                 const list = document.getElementById('prop-list');
-                registry[path].forEach(prop => {
-                    const box = document.createElement('div');
-                    box.className = 'prop-card';
-                    box.innerHTML = `<b>${prop}</b> Use <code>?${prop}=value</code> in the URL to customize this property.`;
-                    list.appendChild(box);
+                registry[path].forEach(p => {
+                    const d = document.createElement('div');
+                    d.className = 'prop-card';
+                    d.innerHTML = `<b>${p}</b> Editable via URL <code>?${p}=value</code>`;
+                    list.appendChild(d);
                 });
 
-                // Render the preview
-                const params = new URLSearchParams(window.location.search);
+                const p = new URLSearchParams(window.location.search);
                 LoaderAPI.render({
                     type: path,
-                    target: '#loader-mount',
-                    color: params.get('color') ? '#' + params.get('color') : undefined,
-                    size: params.get('size') || '80px',
-                    speed: params.get('speed') || undefined
+                    color: p.get('color') ? '#' + p.get('color') : '#38bdf8',
+                    size: p.get('size') || '60px',
+                    speed: p.get('speed') || '1s'
                 });
             } else {
-                document.getElementById('home-screen').style.display = 'block';
+                document.getElementById('home-card').style.display = 'block';
             }
         });
 
         function copyURL() {
-            const url = window.location.href;
-            navigator.clipboard.writeText(url).then(() => {
-                const btn = document.querySelector('.copy-area button');
-                btn.innerText = 'Copied!';
-                setTimeout(() => btn.innerText = 'Copy URL', 2000);
-            });
+            navigator.clipboard.writeText(window.location.href);
+            alert('URL Copied!');
         }
     </script>
 </body>
