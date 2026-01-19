@@ -2,81 +2,82 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loader API Docs</title>
+    <title>Loader API | Documentation</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        body, html { margin: 0; padding: 0; font-family: sans-serif; background: #0f172a; color: white; height: 100%; }
-        #api-interface { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; text-align: center; padding: 20px; }
-        
-        /* The Property Panel */
-        .docs-panel {
-            margin-top: 30px;
-            background: #1e293b;
-            padding: 20px;
-            border-radius: 12px;
-            border: 1px solid #334155;
-            max-width: 500px;
-            text-align: left;
-        }
-        .docs-panel h2 { margin-top: 0; color: #38bdf8; text-transform: capitalize; }
-        code { background: #000; padding: 3px 6px; border-radius: 4px; color: #f472b6; font-size: 0.9rem; }
-        .prop-list { list-style: none; padding: 0; }
-        .prop-list li { margin-bottom: 10px; font-size: 0.85rem; color: #94a3b8; }
-        .prop-list b { color: #fff; }
+        :root { --panel-bg: #1e293b; --accent: #38bdf8; }
+        body { margin: 0; background: #0f172a; color: white; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        #preview-area { height: 300px; display: flex; align-items: center; justify-content: center; width: 100%; border-bottom: 1px solid #334155; }
+        .docs-container { max-width: 600px; width: 90%; padding: 40px 0; }
+        .card { background: var(--panel-bg); padding: 25px; border-radius: 12px; border: 1px solid #334155; }
+        .chip { background: #000; color: #f472b6; padding: 4px 8px; border-radius: 5px; font-family: monospace; font-size: 1rem; }
+        .prop-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+        .prop-item { background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px; font-size: 0.9rem; border: 1px solid rgba(255,255,255,0.1); }
+        .prop-item b { color: var(--accent); display: block; margin-bottom: 4px; }
+        h1 { text-transform: capitalize; color: var(--accent); margin-top: 0; }
     </style>
 </head>
 <body>
 
-    <div id="api-interface">
-        <div id="loader-preview"></div>
+    <div id="preview-area">
+        <div id="loader-mount"></div>
+    </div>
 
-        <div id="docs-output" class="docs-panel" style="display: none;">
-            <h2 id="doc-title">Loader</h2>
-            <p>To use this loader as an API, use this function:</p>
-            <code>LoaderAPI.render({ type: '<span id="doc-type"></span>', target: '#your-id', ... })</code>
+    <div class="docs-container" id="docs-view" style="display:none;">
+        <div class="card">
+            <h1 id="title-text">Loader</h1>
+            <p>To use this native API component, call:</p>
+            <p><span class="chip">LoaderAPI.render({ type: '<span id="type-text"></span>', ... })</span></p>
             
-            <hr style="border: 0; border-top: 1px solid #334155; margin: 20px 0;">
-            
-            <p><b>Editable Properties (URL or JS):</b></p>
-            <ul class="prop-list">
-                <li><b>color:</b> Hex code without #. (e.g. <code>?color=ff0000</code>)</li>
-                <li><b>size:</b> Width/Height in px. (e.g. <code>?size=80px</code>)</li>
-                <li><b>speed:</b> Seconds. (e.g. <code>?speed=2s</code>)</li>
-            </ul>
+            <h3 style="margin-top:30px;">Available Properties</h3>
+            <div class="prop-grid" id="properties-list">
+                </div>
         </div>
     </div>
 
     <script src="index.js"></script>
     <script>
-        function loadPage() {
+        window.onload = () => {
             const path = window.location.pathname.replace(/\//g, '').toLowerCase();
-            const validLoaders = ['spinner', 'ripple', 'morph', 'dots', 'composite', 'skeleton'];
+            
+            // The API configuration (This is the "Source of Truth")
+            const config = {
+                'spinner': ['color', 'size', 'speed'],
+                'ripple': ['color', 'size'],
+                'morph': ['color', 'size', 'speed'],
+                'composite': ['color', 'size', 'speed'],
+                'dots': ['color', 'size'],
+                'skeleton': ['size']
+            };
 
-            if (validLoaders.includes(path)) {
-                // 1. Show the Loader
-                LoaderAPI.render({
-                    type: path,
-                    target: '#loader-preview',
-                    // Pass URL params directly to the preview
-                    color: new URLSearchParams(window.location.search).get('color') ? '#' + new URLSearchParams(window.location.search).get('color') : '#38bdf8',
-                    size: new URLSearchParams(window.location.search).get('size') || '80px',
-                    speed: new URLSearchParams(window.location.search).get('speed') || '1s'
+            if (config[path]) {
+                // 1. Show the Docs panel
+                document.getElementById('docs-view').style.display = 'block';
+                document.getElementById('title-text').innerText = path;
+                document.getElementById('type-text').innerText = path;
+
+                // 2. Automatically list the properties (NOT hard-coded text)
+                const list = document.getElementById('properties-list');
+                config[path].forEach(prop => {
+                    const item = document.createElement('div');
+                    item.className = 'prop-item';
+                    item.innerHTML = `<b>${prop}</b> Use URL param <code>?${prop}=value</code>`;
+                    list.appendChild(item);
                 });
 
-                // 2. Show the Docs
-                document.getElementById('docs-output').style.display = 'block';
-                document.getElementById('doc-title').innerText = path + " Loader";
-                document.getElementById('doc-type').innerText = path;
+                // 3. Render the preview
+                const params = new URLSearchParams(window.location.search);
+                LoaderAPI.render({
+                    type: path,
+                    target: '#loader-mount',
+                    color: params.get('color') ? '#' + params.get('color') : undefined,
+                    size: params.get('size') || undefined,
+                    speed: params.get('speed') || undefined
+                });
             } else {
-                // Show Home Menu
-                document.getElementById('api-interface').innerHTML = `
-                    <h1>Loader API 🚀</h1>
-                    <p>Visit a path to see properties: <code>/spinner</code>, <code>/ripple</code>, <code>/composite</code>, etc.</p>
-                `;
+                document.body.innerHTML = `<div style="padding:100px; text-align:center;"><h1>API Master Library</h1><p>Visit <code>/spinner</code>, <code>/ripple</code>, etc.</p></div>`;
             }
-        }
-        window.onload = loadPage;
+        };
     </script>
 </body>
 </html>
