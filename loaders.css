@@ -1,0 +1,16 @@
+/* loaders.css */
+:root {
+    --loader-primary: #38bdf8;
+    --loader-secondary: #818cf8;
+    --loader-speed: 1s;
+    --loader-size: 45px;
+}
+
+/* Then use those variables in your animations */
+.classic-spinner {
+    width: var(--loader-size);
+    height: var(--loader-size);
+    border: 5px solid rgba(255,255,255,0.1);
+    border-top-color: var(--loader-primary);
+    animation: spin var(--loader-speed) linear infinite;
+}
