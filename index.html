@@ -6,49 +6,60 @@
     <title>Loader API Docs</title>
     <link rel="stylesheet" href="/style.css">
     <style>
-        :root { --accent: #38bdf8; --panel: #1e293b; }
-        body { margin: 0; background: #0f172a; color: white; font-family: system-ui, sans-serif; display: flex; flex-direction: column; align-items: center; }
+        :root { --accent: #38bdf8; --panel: #1e293b; --bg: #0f172a; }
+        body { margin: 0; background: var(--bg); color: white; font-family: system-ui, sans-serif; display: flex; flex-direction: column; align-items: center; }
         
-        #preview-zone { height: 300px; width: 100%; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle, #1e293b 0%, #0f172a 100%); border-bottom: 1px solid #334155; }
+        #preview-box { height: 250px; width: 100%; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle, #1e293b 0%, #0f172a 100%); border-bottom: 1px solid #334155; }
         
-        .content { max-width: 700px; width: 90%; padding: 40px 0; }
+        .container { max-width: 700px; width: 90%; padding: 40px 0; }
         .card { background: var(--panel); padding: 30px; border-radius: 16px; border: 1px solid #334155; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         
-        h1 { margin: 0 0 10px 0; color: var(--accent); text-transform: capitalize; }
-        .code-box { background: #000; padding: 15px; border-radius: 8px; border: 1px solid #334155; color: #f472b6; font-family: monospace; margin: 20px 0; }
+        h1 { margin: 0; color: var(--accent); text-transform: capitalize; font-size: 2.2rem; }
+        .usage-text { color: #94a3b8; margin: 10px 0 25px 0; }
         
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-top: 20px; }
-        .item { background: rgba(255,255,255,0.03); padding: 15px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); }
-        .item b { color: var(--accent); display: block; font-size: 0.75rem; text-transform: uppercase; margin-bottom: 5px; }
-        .item span { font-size: 0.85rem; color: #94a3b8; }
+        .prop-section { margin-top: 30px; border-top: 1px solid #334155; padding-top: 20px; }
+        .prop-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 30px; }
+        .prop-card { background: rgba(0,0,0,0.2); padding: 15px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.05); }
+        .prop-card b { color: var(--accent); display: block; margin-bottom: 5px; font-size: 0.8rem; text-transform: uppercase; }
+        
+        .copy-area { display: flex; gap: 10px; background: #000; padding: 10px; border-radius: 8px; align-items: center; border: 1px solid var(--accent); }
+        .url-text { font-family: monospace; color: #f472b6; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex-grow: 1; }
+        
+        button { background: var(--accent); color: #000; border: none; padding: 8px 16px; border-radius: 5px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        button:hover { opacity: 0.8; }
+        button:active { transform: scale(0.95); }
     </style>
 </head>
 <body>
 
-    <div id="preview-zone">
+    <div id="preview-box">
         <div id="loader-mount"></div>
     </div>
 
-    <div class="content">
-        <div id="docs-card" class="card" style="display:none;">
-            <h1 id="loader-title">Loader</h1>
-            <p>This is a live API preview. Use the properties below to customize the component via JS or URL.</p>
-            
-            <div class="code-box">
-                LoaderAPI.render({ type: '<span id="js-type"></span>', target: '#container' });
+    <div class="container">
+        <div id="loader-info" class="card" style="display:none;">
+            <h1 id="title-text">Loader</h1>
+            <p class="usage-text">This loader is generated dynamically. You can use the properties listed below to modify it via the URL or the JavaScript API.</p>
+
+            <div class="copy-area">
+                <span class="url-text" id="current-url"></span>
+                <button onclick="copyURL()">Copy URL</button>
             </div>
 
-            <h3>Editable Properties</h3>
-            <div id="property-list" class="grid"></div>
+            <div class="prop-section">
+                <h3>Editable Properties</h3>
+                <div id="prop-list" class="prop-grid"></div>
+            </div>
         </div>
 
-        <div id="home-card" class="card" style="display:none; text-align: center;">
-            <h1>API Library</h1>
-            <p>Choose a loader path to see its editable properties:</p>
-            <div class="grid">
-                <a href="/spinner" style="text-decoration:none; color:inherit;" class="item"><b>/spinner</b><span>Ring</span></a>
-                <a href="/ripple" style="text-decoration:none; color:inherit;" class="item"><b>/ripple</b><span>Pulse</span></a>
-                <a href="/composite" style="text-decoration:none; color:inherit;" class="item"><b>/composite</b><span>Combo</span></a>
+        <div id="home-screen" class="card" style="display:none; text-align: center;">
+            <h1>Loader Master API</h1>
+            <p>Visit a path to see editable properties:</p>
+            <div class="prop-grid" style="margin-top:20px">
+                <a href="/spinner" style="text-decoration:none; color:inherit" class="prop-card"><b>/spinner</b>Classic Ring</a>
+                <a href="/ripple" style="text-decoration:none; color:inherit" class="prop-card"><b>/ripple</b>Liquid Pulse</a>
+                <a href="/composite" style="text-decoration:none; color:inherit" class="prop-card"><b>/composite</b>Spinner + Dots</a>
+                <a href="/morph" style="text-decoration:none; color:inherit" class="prop-card"><b>/morph</b>Shape Shifter</a>
             </div>
         </div>
     </div>
@@ -57,31 +68,33 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const path = window.location.pathname.replace(/\//g, '').toLowerCase();
-            
-            // AUTOMATIC PROPERTY DEFINITIONS
-            const loaderData = {
+            const currentURL = window.location.href;
+            document.getElementById('current-url').innerText = currentURL;
+
+            // Property Dictionary (Used to generate text on screen)
+            const registry = {
                 'spinner': ['color', 'size', 'speed'],
                 'ripple': ['color', 'size'],
                 'composite': ['color', 'size', 'speed'],
                 'morph': ['color', 'size', 'speed'],
-                'skeleton': ['size']
+                'skeleton': ['size'],
+                'dots': ['color', 'size']
             };
 
-            if (loaderData[path]) {
-                document.getElementById('docs-card').style.display = 'block';
-                document.getElementById('loader-title').innerText = path;
-                document.getElementById('js-type').innerText = path;
+            if (registry[path]) {
+                document.getElementById('loader-info').style.display = 'block';
+                document.getElementById('title-text').innerText = path;
 
-                // Dynamically build the property list (No hard-coding)
-                const list = document.getElementById('property-list');
-                loaderData[path].forEach(prop => {
-                    const div = document.createElement('div');
-                    div.className = 'item';
-                    div.innerHTML = `<b>${prop}</b><span>Customizable via URL: <code>?${prop}=...</code></span>`;
-                    list.appendChild(div);
+                // Dynamically build the text descriptions for properties
+                const list = document.getElementById('prop-list');
+                registry[path].forEach(prop => {
+                    const box = document.createElement('div');
+                    box.className = 'prop-card';
+                    box.innerHTML = `<b>${prop}</b> Use <code>?${prop}=value</code> in the URL to customize this property.`;
+                    list.appendChild(box);
                 });
 
-                // Render the loader preview
+                // Render the preview
                 const params = new URLSearchParams(window.location.search);
                 LoaderAPI.render({
                     type: path,
@@ -91,9 +104,18 @@
                     speed: params.get('speed') || undefined
                 });
             } else {
-                document.getElementById('home-card').style.display = 'block';
+                document.getElementById('home-screen').style.display = 'block';
             }
         });
+
+        function copyURL() {
+            const url = window.location.href;
+            navigator.clipboard.writeText(url).then(() => {
+                const btn = document.querySelector('.copy-area button');
+                btn.innerText = 'Copied!';
+                setTimeout(() => btn.innerText = 'Copy URL', 2000);
+            });
+        }
     </script>
 </body>
 </html>
